@@ -1,0 +1,63 @@
+---
+title: "QUALITY CONTROL AND PREPROCESSING, SINGLE CELL EXPERIMENTS"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+The script 'QC_plus_doublets.R' located in this repository is valid for 10X-format raw counts.
+Third-party protocol yields matrices where GENE SYMBOLS are rownames.
+ATTENTION: Doublet detection procedures should only be applied to libraries
+generated in the  same experimental batch. Only use one single batch for QC run.
+ *-* many thanks to Dr. L Modolo for most of this code *-*
+
+input : data/MYEXPERMNT : barcodes.tsv.gz features.tsv.gz matrix.mtx.gz
+output : results (pdf) and two.RData objects: 'END.RData' for downstream analysis <https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/overview.html>.
+
+We load an '_END.RData' already generated, on one publicly available data in mouse model from GEO:
+
+```{r stuff}
+listpackages <- c( "ggplot2", "dplyr", "stringr", "tidyverse", "BSgenome",
+                   "GenomeInfoDb", "Seurat","lubridate", # right color
+                   "simpleSingleCell", # for scRNA storage & manipulation
+                   "scater", # for QC control
+                   "scran", # analysis pipeline
+                   "uwot", # UMAP dim-red
+                   "DropletUtils", #utility functions for handling single-cell (RNA-seq)
+                   "AnnotationHub", # ensbl query
+                   "AnnotationDbi", # ensbl query
+                   "sctransform", "SingleCellExperiment", "Matrix" )
+
+lapply(listpackages,require,character.only=TRUE, quietly=T)
+
+prloc = "~/qc_local" #<<<< check !!
+setwd(prloc)# TODO take off
+exper="dorsowt2" # do not add '/'
+resdir="results/" 
+load(paste0("rdatas/",exper,"_END.RData"))
+```
+
+see our SingleCellExperiment object and dimensions 
+```{r stuff2}
+sce
+```
+
+We expect only M musculus but we found out gene symbols from H sapiens (this is negligeable anyway):
+```{r stuff3}
+table(rowData(sce)$species)
+print('Lets see those genesymbols from H sapiens:')
+tail(rowData(sce)[rowData(sce)$species %in% "Homo sapiens",])
+```
+
+```{r stuff4}
+tsnepl <- plotTSNE(sce[rowData(sce)$expressed,sce$is_cell], colour_by="doublet_score")
+detfeat <- scater::plotColData(sce, x="sum",y="detected",colour_by="doublet_score")
+tsnepl + detfeat
+
+```
+

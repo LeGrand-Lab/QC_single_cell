@@ -1,0 +1,141 @@
+[1] "failed DropletUtils::read10xCounts, using Seurat+SCE steps"
+[1] "initial matrix dimensions"
+[1] 27998  2432
+[1] "starting analysis"
+[1] "loading data and adding annotations"
+[1] "post perfeatureQC matrix dimensions"
+[1] 27998  2432
+[1] "colnames(colData(sce))"
+ [1] "n_mm_umi"                     "n_hg_umi"                     "n_umi"                       
+ [4] "species"                      "sum"                          "detected"                    
+ [7] "percent_top_50"               "percent_top_100"              "percent_top_200"             
+[10] "percent_top_500"              "subsets_non_genomic_sum"      "subsets_non_genomic_detected"
+[13] "subsets_non_genomic_percent"  "total"                        "keep_total"                  
+[1] 27998  2432
+[1] "substracting empty drops, kneeplot"
+null device 
+          1 
+   Mode   FALSE    TRUE 
+logical      14    2418 
+[1] "post eval empty drops, matrix dimensions"
+[1] 27998  2432
+[1] "Finding doublets"
+null device 
+          1 
+null device 
+          1 
+[1] "END"
+[1] "FINAL (post doublets detection) matrix dimensions"
+[1] 17616  2418
+[1] "failed DropletUtils::read10xCounts, using Seurat+SCE steps"
+[1] "initial matrix dimensions"
+[1] 27998  2432
+[1] "starting analysis"
+[1] "loading data and adding annotations"
+DataFrame with 6 rows and 0 columns
+DataFrame with 27998 rows and 5 columns
+                  genes_names         ensembl.id     chr_pos is_genomic          species
+                  <character>        <character> <character>  <logical>      <character>
+Xkr4                     Xkr4 ENSMUSG00000051951           1       TRUE     Mus musculus
+Gm1992                 Gm1992 ENSMUSG00000089699           1       TRUE     Mus musculus
+Gm37381               Gm37381 ENSMUSG00000102343           1       TRUE     Mus musculus
+Rp1                       Rp1 ENSMUSG00000025900           1       TRUE     Mus musculus
+Rp1.1                   Rp1.1 ENSMUSG00000025900           1       TRUE     Mus musculus
+...                       ...                ...         ...        ...              ...
+AC168977.1         AC168977.1                                     FALSE exoticGeneSymbol
+PISD                     PISD    ENSG00000241878          22       TRUE     Homo sapiens
+DHRSX                   DHRSX    ENSG00000169084           X       TRUE     Homo sapiens
+Vmn2r122             Vmn2r122 ENSMUSG00000096730  JH584292.1      FALSE     Mus musculus
+CAAA01147332.1 CAAA01147332.1                                     FALSE exoticGeneSymbol
+[1] "species detected by gene symbol, before correction"
+
+exoticGeneSymbol     Homo sapiens     Mus musculus 
+            1829               20            26149 
+DataFrame with 6 rows and 5 columns
+      genes_names                         ensembl.id     chr_pos is_genomic      species
+      <character>                        <character> <character>  <logical>  <character>
+C9             C9 ENSG00000113600_ENSMUSG00000022149                  FALSE Homo sapiens
+WDR97       WDR97                    ENSG00000179698           8       TRUE Homo sapiens
+C2             C2 ENSG00000166278_ENSMUSG00000024371                  FALSE Homo sapiens
+C3             C3 ENSG00000125730_ENSMUSG00000024164                  FALSE Homo sapiens
+PISD         PISD                    ENSG00000241878          22       TRUE Homo sapiens
+DHRSX       DHRSX                    ENSG00000169084           X       TRUE Homo sapiens
+[1] "detecting contamination and inferior outliers"
+DataFrame with 2432 rows and 4 columns
+                    n_mm_umi  n_hg_umi     n_umi      species
+                   <numeric> <numeric> <numeric>  <character>
+AAACCTGCAGGACCCT-1      2636         1      2637 Mus musculus
+AAACGGGAGCTGCGAA-1      6043         3      6046 Mus musculus
+AAACGGGGTGTCTGAT-1      1945         0      1945 Mus musculus
+AAACGGGGTTGTCGCG-1      2678         0      2678 Mus musculus
+AAACGGGTCTTGAGGT-1      2327         0      2327 Mus musculus
+...                      ...       ...       ...          ...
+TTTGTCACACCGAATT-1      3306         1      3307 Mus musculus
+TTTGTCACACTTACGA-1      8624         0      8624 Mus musculus
+TTTGTCAGTGAGGGAG-1      1588         0      1588 Mus musculus
+TTTGTCATCAATCACG-1      2722         0      2722 Mus musculus
+TTTGTCATCGAGGTAG-1      2707         0      2707 Mus musculus
+    n_mm_umi        n_hg_umi           n_umi         species         
+ Min.   : 1249   Min.   :  0.000   Min.   : 1250   Length:2432       
+ 1st Qu.: 2141   1st Qu.:  0.000   1st Qu.: 2142   Class :character  
+ Median : 3204   Median :  1.000   Median : 3204   Mode  :character  
+ Mean   : 4042   Mean   :  2.815   Mean   : 4044                     
+ 3rd Qu.: 5230   3rd Qu.:  3.000   3rd Qu.: 5236                     
+ Max.   :31053   Max.   :111.000   Max.   :31059                     
+[1] "filtering out not expressed features"
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   1250    2142    3204    4044    5236   31059 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+     39     960    1230    1400    1734    5762 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.03124 2.17565 2.48834 2.60081 2.87945 9.06568 
+null device 
+          1 
+
+FALSE 
+ 2432 
+DataFrame with 6 rows and 8 columns
+        genes_names         ensembl.id     chr_pos is_genomic      species expressed                mean
+        <character>        <character> <character>  <logical>  <character> <logical>           <numeric>
+Xkr4           Xkr4 ENSMUSG00000051951           1       TRUE Mus musculus     FALSE                   0
+Gm1992       Gm1992 ENSMUSG00000089699           1       TRUE Mus musculus      TRUE 0.00123355263157895
+Gm37381     Gm37381 ENSMUSG00000102343           1       TRUE Mus musculus     FALSE                   0
+Rp1             Rp1 ENSMUSG00000025900           1       TRUE Mus musculus     FALSE                   0
+Rp1.1         Rp1.1 ENSMUSG00000025900           1       TRUE Mus musculus     FALSE                   0
+Sox17         Sox17 ENSMUSG00000025902           1       TRUE Mus musculus      TRUE   0.583470394736842
+                  detected
+                 <numeric>
+Xkr4                     0
+Gm1992  0.0411184210526316
+Gm37381                  0
+Rp1                      0
+Rp1.1                    0
+Sox17     15.4605263157895
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.0000  0.2056  4.9993  4.4408 99.8355 
+null device 
+          1 
+[1] "post perfeatureQC matrix dimensions"
+[1] 27998  2432
+[1] "colnames(colData(sce))"
+ [1] "n_mm_umi"                     "n_hg_umi"                     "n_umi"                       
+ [4] "species"                      "sum"                          "detected"                    
+ [7] "percent_top_50"               "percent_top_100"              "percent_top_200"             
+[10] "percent_top_500"              "subsets_non_genomic_sum"      "subsets_non_genomic_detected"
+[13] "subsets_non_genomic_percent"  "total"                        "keep_total"                  
+[1] 27998  2432
+[1] "substracting empty drops, kneeplot"
+null device 
+          1 
+   Mode   FALSE    TRUE 
+logical      14    2418 
+[1] "post eval empty drops, matrix dimensions"
+[1] 27998  2432
+[1] "Finding doublets"
+null device 
+          1 
+null device 
+          1 
+[1] "END"
+[1] "FINAL (post doublets detection) matrix dimensions"
+[1] 17616  2418
