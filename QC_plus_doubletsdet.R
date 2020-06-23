@@ -27,7 +27,6 @@ lapply(listpackages,require,character.only=TRUE)
 
 prloc = "~/QC_single_cell" #<<<< check !!
 setwd(prloc)
-setwd("~/qc_local")# TODO take off
 
 exper="dorsowt2" # do not add '/'
 

@@ -3,6 +3,7 @@ title: "QUALITY CONTROL AND PREPROCESSING, SINGLE CELL EXPERIMENTS"
 output:
   html_document:
     df_print: paged
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -35,7 +36,7 @@ listpackages <- c( "ggplot2", "dplyr", "stringr", "tidyverse", "BSgenome",
 
 lapply(listpackages,require,character.only=TRUE, quietly=T)
 
-prloc = "~/qc_local" #<<<< check !!
+prloc = "~/QC_single_cell" #<<<< check !!
 setwd(prloc)# TODO take off
 exper="dorsowt2" # do not add '/'
 resdir="results/" 
