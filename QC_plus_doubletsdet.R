@@ -7,10 +7,17 @@
 #  *-* many thanks to Dr. L Modolo for most of this code *-*
 # --
 # input : data/MYEXPERMNT : barcodes.tsv.gz features.tsv.gz matrix.mtx.gz
-# output : results (pdf) and two.RData objects: 'END.RData' for downstream analysis
+# output : results/*.pdf and  'rdatas/MYEXPERMT_END.RData' for downstream analysis
 # Joha GL 2020
 ##
-#  check if modolo cited: https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/overview.html
+
+
+#  ============ USER DEFINED
+prloc = "~/QC_single_cell" #<<<< check working directory!!
+exper="dorsowt2" # TODO change in coherence to folder input, do not add '/'
+#  ============ end user defined
+
+
 listpackages <- c( "ggplot2",   "dplyr", "stringr",   "tidyverse",
                    "BSgenome",  "GenomeInfoDb", "Seurat",
                    "lubridate", # right color
@@ -25,11 +32,8 @@ listpackages <- c( "ggplot2",   "dplyr", "stringr",   "tidyverse",
 
 lapply(listpackages,require,character.only=TRUE)
 
-prloc = "~/QC_single_cell" #<<<< check !!
+# ================== SETTING PATHS
 setwd(prloc)
-
-exper="dorsowt2" # do not add '/'
-
 resdir="results/" 
 system(paste("mkdir",resdir)) # creates if not exists
 system("mkdir rdatas") #creates if not exists

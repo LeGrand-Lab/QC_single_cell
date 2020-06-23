@@ -1,0 +1,95 @@
+---
+title: "QUALITY CONTROL AND PREPROCESSING, SINGLE CELL EXPERIMENTS"
+output: 
+  pdf_document: default
+
+---
+
+## Introduction
+The script 'QC_plus_doublets.R' located in this repository 'QC_single_cell' is valid for 10X-format raw counts.
+Single Cell RNA sequencing (scRNAseq) projects in our setting start with cell-by-cell isolation and cDNA purification followed by sequencing, alignment and Cell Ranger filtering, being these three last steps  performed by a third party laboratory. Even in this case, rigorous pre-processing is mandatory. Present document is only for practical instructions regarding the QC script. Concepts and details about scRNAseq and quality control are found in INMG_SingleCell/scRNAseqMuscleNiche.pdf. 
+
+*IMPORTANT* Use **one single** batch data when running this script, as doublet detection procedures should only be applied to libraries generated in the same experimental batch.
+
+## Getting started
+The input is the experiment in the form of a folder (here for our illustration 'dorsowt1'), that consists of the raw count matrix and its respective metadata, organized as follows:
+
+\begin{itemize}
+\item data/
+  \begin{itemize}
+    \item dorsowt/
+      \begin{itemize}
+        \item barcodes.tsv.gz
+        \item features.tsv.gz
+        \item matrix.mtx.gz
+      \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+Within the R code, change 'exper' variable accordingly, check also working directory ('prloc' variable). I recommend to stick to default location (HOME) for 'QC_single_cell'. Launch from RStudio, and if any difficulties are encountered check 'results/outputsfile.txt' to see at which level error occurs.
+An executable version will be available to be able to run into a bash loop, taking as argument the experiment folder name.
+
+## Brief Illustration
+
+```{r stuff0, include=FALSE, results='hide'}
+
+listpackages <- c( "ggplot2",   "dplyr", "stringr",   "tidyverse",
+                   "BSgenome",  "GenomeInfoDb", "Seurat",
+                   "lubridate", # right color
+                   "simpleSingleCell", # for scRNA storage & manipulation
+                   "scater", # for QC control
+                   "scran", # analysis pipeline
+                   "uwot", # UMAP dim-red
+                   "DropletUtils", #utility functions for handling single-cell (RNA-seq)
+                   "AnnotationHub", # ensbl query
+                   "AnnotationDbi", # ensbl query
+                   "sctransform", "SingleCellExperiment", "Matrix" )
+
+lapply(listpackages,require,character.only=TRUE, quietly=T)
+prloc = "~/QC_single_cell" 
+setwd(prloc)
+exper="dorsowt2" # TODO do not add '/'
+resdir="results/"
+
+```
+
+Here we load an '_END.RData' already generated after running 'QC_plus_doublets.R' on publicly available 10X data in mouse model from GEO (accession code GSM3614993). 
+Lets see SingleCellExperiment object and dimensions:
+
+```{r stuff2}
+load(paste0("rdatas/",exper,"_END.RData"))
+
+sce
+```
+
+We expect only M musculus but we found out gene symbols from H sapiens (this is negligeable anyway, and metrics did not show relevant contamination):
+```{r stuff3}
+table(rowData(sce)$species)
+tail(rowData(sce)[rowData(sce)$species %in% "Homo sapiens",])
+```
+
+## Doublets detection
+
+```{r stuff4}
+tsnepl <- plotTSNE(sce[rowData(sce)$expressed,sce$is_cell], colour_by="doublet_score")
+detfeat <- scater::plotColData(sce, x="sum",y="detected",colour_by="doublet_score")
+tsnepl + detfeat
+
+```
+
+#### output
+All figures in .pdf format are saved in 'results/' whereas in 'rdatas/' a '_END.RData' file containing filtered sce object can be found.
+
+## Acknowledgements
+**Many thanks to Dr. L Modolo for most of this code**
+
+## sources
+http://perso.ens-lyon.fr/laurent.modolo/scRNA/#74_cell_type_annotation
+https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/overview.html
+stackoverflow (multiple q/a)
+
+#### author
+Johanna Galvis-Lascroux, 2020
+
+
+
