@@ -6,18 +6,21 @@ output:
 ---
 
 ## Introduction
-The script 'QC_plus_doublets.R' located in this repository 'QC_single_cell' is valid for 10X-format raw counts.
-Single Cell RNA sequencing (scRNAseq) projects in our setting start with cell-by-cell isolation and cDNA purification followed by sequencing, alignment and Cell Ranger filtering, being these three last steps  performed by a third party laboratory. Even in this case, rigorous pre-processing is mandatory. Present document is only for practical instructions regarding the QC script. Concepts and details about scRNAseq and quality control are found in INMG_SingleCell/scRNAseqMuscleNiche.pdf. 
+The script 'QC_plus_doubletsdet.R' located in this repository is valid for 10X-format raw counts.
+Single Cell RNA sequencing (scRNAseq) projects in our setting start with cell isolation from skeletal muscle and sorting, followed by Chromium transcriptome 3' protocol (10X Genomics) which includes barcoded gel beads library preparation, unique molecular identifier (UMI) linking, sequencing, alignment and Cell Ranger filtering. The 10X protocol is performed by a third party laboratory, then resulting raw count matrix and metadata are received for our downstream analysis. Even in this scenario, rigorous pre-processing is mandatory. 
+
+The present document is only for practical instructions regarding the QC script. Concepts and details about scRNAseq and quality control are found in INMG_SingleCell/scRNAseqMuscleNiche.pdf. 
+
+## Getting started
 
 *IMPORTANT* Use **one single** batch data when running this script, as doublet detection procedures should only be applied to libraries generated in the same experimental batch.
 
-## Getting started
-The input is the experiment in the form of a folder (here for our illustration 'dorsowt1'), that consists of the raw count matrix and its respective metadata, organized as follows:
+The input is the experiment in the form of a folder (here for our illustration 'dorsowt2'), containing the raw count matrix and its respective metadata, organized as follows:
 
 \begin{itemize}
 \item data/
   \begin{itemize}
-    \item dorsowt/
+    \item dorsowt2/
       \begin{itemize}
         \item barcodes.tsv.gz
         \item features.tsv.gz
@@ -27,7 +30,9 @@ The input is the experiment in the form of a folder (here for our illustration '
 \end{itemize}
 
 Within the R code, change 'exper' variable accordingly, check also working directory ('prloc' variable). I recommend to stick to default location (HOME) for 'QC_single_cell'. Launch from RStudio, and if any difficulties are encountered check 'results/outputsfile.txt' to see at which level error occurs.
-An executable version will be available to be able to run into a bash loop, taking as argument the experiment folder name.
+An executable version will be available to be able to run into a bash loop, taking as argument the experiment's raw matrix folder name.
+
+'QC_plus_doubletsdet.R' must be used if features are present as gene symbols ("Gsn"). One version for features in the form of Ensembl identifiers ("ENSMUSG00000026879") will be soon available.
 
 ## Brief Illustration
 
@@ -48,12 +53,12 @@ listpackages <- c( "ggplot2",   "dplyr", "stringr",   "tidyverse",
 lapply(listpackages,require,character.only=TRUE, quietly=T)
 prloc = "~/QC_single_cell" 
 setwd(prloc)
-exper="dorsowt2" # TODO do not add '/'
+exper="dorsowt2" # TODO set accordingly
 resdir="results/"
 
 ```
 
-Here we load an '_END.RData' already generated after running 'QC_plus_doublets.R' on publicly available 10X data in mouse model from GEO (accession code GSM3614993). 
+Here we load an '_END.RData' already generated after running 'QC_plus_doubletsdet.R' on publicly available 10X data in mouse model from GEO (accession code GSM3614993). 
 Lets see SingleCellExperiment object and dimensions:
 
 ```{r stuff2}
@@ -78,15 +83,19 @@ tsnepl + detfeat
 ```
 
 #### output
-All figures in .pdf format are saved in 'results/' whereas in 'rdatas/' a '_END.RData' file containing filtered sce object can be found.
+All figures in .pdf format are saved in 'results/' whereas 'rdatas/_END.RData' file corresponds to filtered sce object.
 
 ## Acknowledgements
 **Many thanks to Dr. L Modolo for most of this code**
 
 ## sources
-http://perso.ens-lyon.fr/laurent.modolo/scRNA/#74_cell_type_annotation
-https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/overview.html
-stackoverflow (multiple q/a)
+
+I strongly encourage the user/developer to read:
+
+<http://perso.ens-lyon.fr/laurent.modolo/scRNA/>
+
+<https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/overview.html>
+
 
 #### author
 Johanna Galvis-Lascroux, 2020

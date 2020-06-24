@@ -14,10 +14,9 @@
 
 #  ============ USER DEFINED
 prloc = "~/QC_single_cell" #<<<< check working directory!!
-exper="dorsowt2" # TODO change in coherence to folder input, do not add '/'
+exper="dorsowt2" # TODO change in coherence to folder input
 #  ============ end user defined
-
-
+exper = gsub("/",'',exper) 
 listpackages <- c( "ggplot2",   "dplyr", "stringr",   "tidyverse",
                    "BSgenome",  "GenomeInfoDb", "Seurat",
                    "lubridate", # right color
@@ -40,7 +39,9 @@ system("mkdir rdatas") #creates if not exists
 
 sink(paste0(resdir,"outputsfile.txt"), append=TRUE) 
 sink(paste0(resdir,"outputsfile.txt"), append=TRUE, type="message")
+
 # read 10X 
+# ================================================================================
 sce <- tryCatch({
     sce <- read10xCounts(paste0("data/",exper), type="sparse")
     return(sce)
@@ -58,7 +59,7 @@ print("initial matrix dimensions")
 dim(sce)#27998  2432
 print("starting analysis")
 print("loading data and adding annotations")
-# ================================================================================
+
 
  
 head(rowData(sce))
@@ -262,6 +263,8 @@ print("FINAL (post doublets detection) matrix dimensions")
 dim(sce)
 sink()
 sink(type="message")
+# END
+# ================================================================================
 ## NOTES:
 # note that exemple query:
 #   mapIds(org.Hs.eg.db, keys=MYVECTOR, column="SYMBOL", keytype="ENTREZID")
